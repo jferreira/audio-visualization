@@ -87,21 +87,45 @@ function draw() {
 
   // Analyze the audio spectrum using FFT
   let spectrum = fft.analyze();
+  
+  // Draw the FFT graph on the left side (flipped horizontally)
+  for (let i = spectrum.length - 1; i >= 0; i--) {
+    // Set the fill color based on the spectrum frequency
+    fill(i, 255, 255);
+    let amp = spectrum[i];
+    let y = map(amp, 0, 256, height, 0);
+    // Calculate the x-position for the left side (flipped horizontally)
+    let xLeft = width / 2 - (i * (space_between_lines / 2) + space_between_lines / 2);
+    // Draw rectangles for the audio visualization on the left side
+    rect(xLeft, y, space_between_lines / 2, height - y);
+  }
+
+  // Calculate the total width of the right-side FFT graph
+  let rightGraphWidth = width / 2;
+  
+  // Draw the FFT graph on the right side (touching the left graph)
   for (let i = 0; i < spectrum.length; i++) {
     // Set the fill color based on the spectrum frequency
     fill(i, 255, 255);
     let amp = spectrum[i];
     let y = map(amp, 0, 256, height, 0);
-    // Draw rectangles for the audio visualization
-    rect(i * space_between_lines, y, space_between_lines, height - y);
+    
+    // Calculate the x-position for the right side (touching the left graph)
+    let xRight = width / 2 + (i * (space_between_lines / 2));
+    // Draw rectangles for the audio visualization on the right side
+    rect(xRight, y, space_between_lines / 2, height - y);
   }
 
   // Display the current song title at the bottom of the canvas
-  fill(255); // Set text color to white
+  fill(0); // Set text color to black
   textSize(20); // Set text size
-  textAlign(CENTER); // Center-align the text
-  text(songTitle, width / 2, height - 20); // Display the song title
+  textAlign(CENTER, BOTTOM); // Center-align the text at the bottom
+  text(songTitle, width / 2, height); // Display the song title
 }
+
+
+
+
 
 function touchStarted() {
   // Resume the audio context to enable audio playback on touch devices

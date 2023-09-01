@@ -23,7 +23,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(windowWidth, 640);
   // Set angle mode to DEGREES
   angleMode(DEGREES);
   // Set color mode to HSB
@@ -44,10 +44,11 @@ function setup() {
   // Start playing the first song
   songs[currentSongIndex].play();
   
-  // Create an FFT object for audio analysis
-  fft = new p5.FFT(0.9, 128);
-  // Calculate the space between lines for visualization
-  space_between_lines = width / 128;
+// Create an FFT object for audio analysis
+fft = new p5.FFT(0.9, 128);
+// Calculate the space between lines for visualization
+space_between_lines = 10; // Adjust this value for thicker bars and larger gaps
+
 }
 
 function toggleSong() {
@@ -88,10 +89,10 @@ function draw() {
   // Analyze the audio spectrum using FFT
   let spectrum = fft.analyze();
   
-  // Draw the FFT graph on the left side (flipped horizontally)
+  // Draw the FFT graph on the left side (flipped horizontally) with white bars and varying opacity
   for (let i = spectrum.length - 1; i >= 0; i--) {
-    // Set the fill color based on the spectrum frequency
-    fill(i, 255, 255);
+    // Set the fill color to white with varying opacity based on spectrum frequency
+    fill(255, map(i, 0, spectrum.length, 0, 255));
     let amp = spectrum[i];
     let y = map(amp, 0, 256, height, 0);
     // Calculate the x-position for the left side (flipped horizontally)
@@ -103,10 +104,10 @@ function draw() {
   // Calculate the total width of the right-side FFT graph
   let rightGraphWidth = width / 2;
   
-  // Draw the FFT graph on the right side (touching the left graph)
+  // Draw the FFT graph on the right side (touching the left graph) with white bars and varying opacity
   for (let i = 0; i < spectrum.length; i++) {
-    // Set the fill color based on the spectrum frequency
-    fill(i, 255, 255);
+    // Set the fill color to white with varying opacity based on spectrum frequency
+    fill(255, map(i, 0, spectrum.length, 0, 255));
     let amp = spectrum[i];
     let y = map(amp, 0, 256, height, 0);
     
